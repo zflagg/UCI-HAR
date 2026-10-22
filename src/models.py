@@ -1,13 +1,26 @@
-"""Models that take input of shape (batch, channels, time) and return class logits."""
+# Models that take input of shape (batch, channels, time) and return class logits
 import torch
 from torch import nn
 
 
+# Three conv blocks, then global average pooling over time
 class CNN1D(nn.Module):
-    """Three conv blocks, then global average pooling over time."""
 
     def __init__(self, in_channels, n_classes, width=64, dropout=0.3):
         super().__init__()
+
+        # model = models.Sequential([
+        # # Input shape: (timesteps, features)
+        # layers.Conv1D(
+        #     filters=64, kernel_size=3, activation='relu', input_shape=(100, 1)
+        # ),
+        # layers.MaxPooling1D(pool_size=2),
+        # layers.Conv1D(filters=32, kernel_size=3, activation='relu'),
+        # layers.MaxPooling1D(pool_size=2),
+        # layers.Flatten(),
+        # layers.Dense(64, activation='relu'),
+        # layers.Dense(10, activation='softmax')
+        # ])
 
         def block(c_in, c_out, k):
             return nn.Sequential(
@@ -29,8 +42,8 @@ class CNN1D(nn.Module):
         return self.head(x)
 
 
+# Two-layer GRU over time; classifies from the final hidden state
 class GRUClassifier(nn.Module):
-    """Two-layer GRU over time; classifies from the final hidden state."""
 
     def __init__(self, in_channels, n_classes, hidden=64, dropout=0.3):
         super().__init__()
