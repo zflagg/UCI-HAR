@@ -1,9 +1,3 @@
-"""Train a deep model on windowed sensor data.
-
-Example:
-    python -m src.train --dataset synthetic --epochs 5
-    python -m src.train --dataset har --data-root "data/UCI HAR Dataset" --model cnn --augment
-"""
 import argparse
 import json
 import time
@@ -45,7 +39,7 @@ def main():
     (X_tr, y_tr, s_tr), (X_te, y_te, _), labels = load_dataset(args.dataset, args.data_root)
     n_classes, in_channels, T = len(labels), X_tr.shape[1], X_tr.shape[2]
 
-    # Validation subjects are carved out of the training subjects; test subjects are never touched.
+    # Validation subjects are carved out of the training subjects; test subjects are never touched
     tr_mask, val_mask = subject_split(s_tr, val_frac=0.2, seed=args.seed)
     mean, std = fit_norm(X_tr[tr_mask])  # fit on train split only
     norm = lambda X: apply_norm(X, mean, std)
